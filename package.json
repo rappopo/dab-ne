@@ -4,7 +4,7 @@
   "description": "A NeDB data access layer that is so stupid!",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --exit"
   },
   "keywords": [
     "dab",
@@ -17,6 +17,7 @@
   "author": "Ardhi Lukianto <ardhi@lukianto.com>",
   "license": "MIT",
   "dependencies": {
+    "@rappopo/dab": "0.0.1",
     "nedb": "^1.8.0"
   },
   "devDependencies": {
