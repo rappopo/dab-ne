@@ -1,0 +1,28 @@
+{
+  "name": "@rappopo/dab-ne",
+  "version": "0.0.1",
+  "description": "A NeDB DAL that so stupid!",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "dab",
+    "dab-nedb",
+    "nedb",
+    "data",
+    "access",
+    "dal"
+  ],
+  "author": "Ardhi Lukianto <ardhi@lukianto.com>",
+  "license": "MIT",
+  "dependencies": {
+    "nedb": "^1.8.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "chai-subset": "^1.6.0",
+    "lodash": "^4.17.4"
+  }
+}
