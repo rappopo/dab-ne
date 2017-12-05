@@ -1,7 +1,7 @@
 {
   "name": "@rappopo/dab-ne",
   "version": "0.0.1",
-  "description": "A NeDB DAL that so stupid!",
+  "description": "A NeDB data access layer that is so stupid!",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
