@@ -1,5 +1,41 @@
 # @rappopo/dab-ne
 
+A [Rappopo DAB](https://github.com/rappopo/dab) implementation for NeDB. 
+
+## Installation
+
+Simply invoke this command in your project folder:
+
+```
+$ npm install --save @rappopo/dab-ne
+```
+
+And within your script:
+
+```javascript
+const DabNe = require('@rappopo/dab-ne')
+const dab = new DabNe({
+  path: '/path/to/nedb',
+  dbName: 'mydb'
+})
+...
+dab.findOne('my-doc').then(function(doc) { ... })
+```
+
+## Options
+
+`path`: the path where all NeDB files will be saved and reside. If it not provided, it'll defaults to */tmp*
+
+`dbName`: the database name. You'll most likely want to give a custom name, otherwise it defaults to *test*
+
+`inMemory`: if it *true*, data won't be persisted. Defaults to *false* 
+
+## Misc
+
+* [Methods](https://github.com/rappopo/dab)
+* [ChangeLog](CHANGELOG.md)
+* Donation: Bitcoin **16HVCkdaNMvw3YdBYGHbtt3K5bmpRmH74Y**
+
 ## License
 
 (The MIT License)

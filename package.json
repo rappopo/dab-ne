@@ -1,6 +1,6 @@
 {
   "name": "@rappopo/dab-ne",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A NeDB data access layer that is so stupid!",
   "main": "index.js",
   "scripts": {
@@ -16,8 +16,13 @@
   ],
   "author": "Ardhi Lukianto <ardhi@lukianto.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rappopo/dab-ne.git"
+  },
   "dependencies": {
-    "@rappopo/dab": "0.0.1",
+    "@rappopo/dab": "0.0.5",
+    "async": "^2.6.0",
     "nedb": "^1.8.0"
   },
   "devDependencies": {
