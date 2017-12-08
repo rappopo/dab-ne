@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.3
+
+* Spec changed on bulkRemove
+
 ## 0.0.2
 
 * Adding .asCallback to the Promise

@@ -1,6 +1,6 @@
 {
   "name": "@rappopo/dab-ne",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A NeDB data access layer that is so stupid!",
   "main": "index.js",
   "scripts": {

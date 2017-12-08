@@ -172,18 +172,23 @@ class DabNe extends Dab {
       if (!this._.isArray(body))
         return reject(new Error('Require array'))
 
+      let proj = {}
       this._.each(body, (b, i) => {
         if (!b[this.options.idSrc])
           b[this.options.idSrc] = this.uuid()
         body[i] = b
+        this._.forOwn(b, (v, k) => {
+          proj[k] = 0
+        })
       })
+      proj._id = 1
       const keys = this._(body).map(this.options.idSrc).value()
 
       this.client.find({
         _id: {
           $in: keys
         }
-      }, (err, docs) => {
+      }, proj, (err, docs) => {
         if (err)
           return reject(err)
         let info = this._.map(docs, '_id'),
@@ -226,18 +231,23 @@ class DabNe extends Dab {
       if (!this._.isArray(body))
         return reject(new Error('Require array'))
 
+      let proj = {}
       this._.each(body, (b, i) => {
         if (!b[this.options.idSrc])
           b[this.options.idSrc] = this.uuid()
         body[i] = b
+        this._.forOwn(b, (v, k) => {
+          proj[k] = 0
+        })
       })
+      proj._id = 1
       const keys = this._(body).map(this.options.idSrc).value()
 
       this.client.find({
         _id: {
           $in: keys
         }
-      }, (err, docs) => {
+      }, proj, (err, docs) => {
         if (err)
           return reject(err)
         let info = this._.map(docs, '_id'),
@@ -291,17 +301,12 @@ class DabNe extends Dab {
     return new Promise((resolve, reject) => {
       if (!this._.isArray(body))
         return reject(new Error('Require array'))
-
       this._.each(body, (b, i) => {
-        if (!b[this.options.idSrc])
-          b[this.options.idSrc] = this.uuid()
-        body[i] = b
+        body[i] = b || this.uuid()
       })
-      const keys = this._(body).map(this.options.idSrc).value()
-
       this.client.find({
         _id: {
-          $in: keys
+          $in: body
         }
       }, (err, docs) => {
         if (err)
@@ -309,20 +314,20 @@ class DabNe extends Dab {
         let info = this._.map(docs, '_id'),
           newBody = this._.clone(body)
         this._.pullAllWith(newBody, info, (i,x) => {
-          return i._id !== x
+          return i !== x
         })
 
         this.client.remove({
           _id: {
-            $in: keys
+            $in: body
           }
         }, { multi: true }, err => {
           if (err)
             return reject(err)
           let ok = 0, status = []
           this._.each(body, (r, i) => {
-            let stat = { success: info.indexOf(r._id) > -1 ? true : false }
-            stat[this.options.idDest] = r._id
+            let stat = { success: info.indexOf(r) > -1 ? true : false }
+            stat[this.options.idDest] = r
             if (!stat.success)
               stat.message = 'Not found'
             else
