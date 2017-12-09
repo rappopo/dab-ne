@@ -20,6 +20,8 @@ describe('find', function () {
     })
   })
 
+  this.timeout(lib.timeout)
+
   it('should return empty value', function () {
     const cls = new Cls(lib.options)
     return expect(cls.find({ query: { _id: 'no-agent' }})).to.eventually.have.property('data').that.have.lengthOf(0)

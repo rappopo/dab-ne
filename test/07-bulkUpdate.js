@@ -11,7 +11,7 @@ chai.use(chaiAsPromised)
 const Cls = require('../index'),
   lib = require('./_lib')
 
-describe('bulkCreate', function () {
+describe('bulkUpdate', function () {
   beforeEach(function (done) {
     this.timeout(lib.timeout)
     setTimeout(function() {
@@ -19,8 +19,10 @@ describe('bulkCreate', function () {
         if (err) throw err
         done()
       })      
-    }, 1000)
+    }, 2000)
   })
+
+  this.timeout(lib.timeout)
 
   it('should return error if body isn\'t an array', function () {
     const cls = new Cls(lib.options)
@@ -29,13 +31,15 @@ describe('bulkCreate', function () {
 
   it('should return the correct bulk status', function() {
     const cls = new Cls(lib.options)
-    let p = cls.bulkCreate(lib.bulkDocs)
+    let docs = lib._.cloneDeep(lib.bulkDocs)
+    docs[0].name = 'Jackie Bauer'
+    let p = cls.bulkUpdate(docs, { withDetail: true })
     return Promise.all([
-      expect(p).to.eventually.have.property('stat').that.have.property('ok').equal(2),
-      expect(p).to.eventually.have.property('stat').that.have.property('fail').equal(1),
+      expect(p).to.eventually.have.property('stat').that.have.property('ok').equal(1),
+      expect(p).to.eventually.have.property('stat').that.have.property('fail').equal(2),
       expect(p).to.eventually.have.property('stat').that.have.property('total').equal(3),
-      expect(p).to.eventually.have.property('data').that.containSubset([{ _id: 'jack-bauer', message: 'Exists', success: false }]),
-      expect(p).to.eventually.have.property('data').that.containSubset([{ _id: 'johnny-english', success: true }])
+      expect(p).to.eventually.have.property('detail').that.containSubset([{ _id: 'jack-bauer', success: true }]),
+      expect(p).to.eventually.have.property('detail').that.containSubset([{ _id: 'johnny-english', message: 'Not found' }])
     ])
   })
 

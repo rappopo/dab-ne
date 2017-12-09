@@ -215,9 +215,10 @@ class DabNe extends Dab {
               ok: ok,
               fail: body.length - ok,
               total: body.length
-            },
-            data: status
+            }
           }
+          if (params.withDetail)
+            data.detail = status
           resolve(data)
         })    
       })
@@ -286,9 +287,10 @@ class DabNe extends Dab {
               ok: ok,
               fail: body.length - ok,
               total: body.length
-            },
-            data: status
+            }
           }
+          if (params.withDetail)
+            data.detail = status
           resolve(data)
         })
       })
@@ -340,9 +342,10 @@ class DabNe extends Dab {
               ok: ok,
               fail: body.length - ok,
               total: body.length
-            },
-            data: status
+            }
           }
+          if (params.withDetail)
+            data.detail = status
           resolve(data)
         })
       })

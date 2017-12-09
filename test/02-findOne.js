@@ -19,6 +19,8 @@ describe('findOne', function () {
     })
   })
 
+  this.timeout(lib.timeout)
+
   it('should return empty value', function () {
     const cls = new Cls(lib.options)
     return expect(cls.findOne('no-agent')).to.eventually.rejectedWith('Not found')
