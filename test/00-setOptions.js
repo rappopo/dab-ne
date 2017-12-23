@@ -13,20 +13,9 @@ describe('setOptions', function () {
   it('should return the default options', function () {
     const cls = new Cls()
     expect(cls.options).to.include({
-      idSrc: '_id',
-      idDest: '_id',
       path: '/tmp',
       dbName: 'test',
       inMemory: false
-    })
-  })
-
-  it('should return options with custom idDest', function () {
-    const cls = new Cls({ 
-      idDest: 'uid'
-    })
-    expect(cls.options).to.include({
-      idDest: 'uid'
     })
   })
 

@@ -12,8 +12,6 @@ class DabNe extends Dab {
 
   setOptions (options) {
     super.setOptions(this._.merge(this.options, {
-      idSrc: '_id',
-      idDest: options.idDest || options.idSrc || '_id',
       path: options.path || '/tmp',
       dbName: options.dbName || 'test',
       inMemory: false,
@@ -55,9 +53,7 @@ class DabNe extends Dab {
   }
 
   _findOne(id, params, callback) {
-    let key = {}
-    key[this.options.idSrc] = id
-    this.client.findOne(key, (err, result) => {
+    this.client.findOne({ _id: id }, (err, result) => {
       if (err) {
         if (this._.isEmpty(result))
           err = new Error('Not found')
@@ -96,13 +92,9 @@ class DabNe extends Dab {
     [params, body] = this.sanitize(params, body)
     this.setClient(params)
     return new Promise((resolve, reject) => {
-      if (body[this.options.idDest] && this.options.idDest !== this.options.idSrc) {
-        body[this.options.idSrc] = body[this.options.idDest]
-        delete body[this.options.idDest]
-      }
       this.client.insert(body, (err, result) => {
         if (err) {
-          if (err.key === body[this.options.idSrc] && err.errorType === 'uniqueViolated')
+          if (err.key === body._id && err.errorType === 'uniqueViolated')
             err = new Error('Exists')
           return reject(err)
         }
@@ -118,17 +110,15 @@ class DabNe extends Dab {
   update (id, body, params) {
     [params, body] = this.sanitize(params, body)
     this.setClient(params)
-    body = this._.omit(body, [this.options.idDest || this.options.idSrc])
+    body = this._.omit(body, ['_id'])
     return new Promise((resolve, reject) => {
       this._findOne(id, params, result => {
         if (!result.success)
           return reject(result.err)
-        let source = result.data,
-          key = {}
-        key[this.options.idSrc] = id
+        let source = result.data
         if (!params.fullReplace)
           body = { $set: body }
-        this.client.update(key, body, { returnUpdatedDocs: true }, (err, numAffected, affectedDocs, upsert) => {
+        this.client.update({ _id: id }, body, { returnUpdatedDocs: true }, (err, numAffected, affectedDocs, upsert) => {
           if (err)
             return reject(err)
           let data = {
@@ -150,10 +140,8 @@ class DabNe extends Dab {
       this._findOne(id, params, result => {
         if (!result.success)
           return reject(result.err)
-        let source = result.data,
-          key = {}
-        key[this.options.idSrc] = id
-        this.client.remove(key, {}, (err, numRemoved) => {
+        let source = result.data
+        this.client.remove({ _id: id }, {}, (err, numRemoved) => {
           if (err) {
             reject(err)
             return callback(err)
@@ -174,15 +162,15 @@ class DabNe extends Dab {
 
       let proj = {}
       this._.each(body, (b, i) => {
-        if (!b[this.options.idSrc])
-          b[this.options.idSrc] = this.uuid()
+        if (!b._id)
+          b._id = this.uuid()
         body[i] = b
         this._.forOwn(b, (v, k) => {
           proj[k] = 0
         })
       })
       proj._id = 1
-      const keys = this._(body).map(this.options.idSrc).value()
+      const keys = this._(body).map('_id').value()
 
       this.client.find({
         _id: {
@@ -202,7 +190,7 @@ class DabNe extends Dab {
           let ok = 0, status = []
           this._.each(body, (r, i) => {
             let stat = { success: info.indexOf(r._id) === -1 ? true : false }
-            stat[this.options.idDest] = r._id
+            stat._id = r._id
             if (!stat.success)
               stat.message = 'Exists'
             else
@@ -234,15 +222,15 @@ class DabNe extends Dab {
 
       let proj = {}
       this._.each(body, (b, i) => {
-        if (!b[this.options.idSrc])
-          b[this.options.idSrc] = this.uuid()
+        if (!b._id)
+          b._id = this.uuid()
         body[i] = b
         this._.forOwn(b, (v, k) => {
           proj[k] = 0
         })
       })
       proj._id = 1
-      const keys = this._(body).map(this.options.idSrc).value()
+      const keys = this._(body).map('_id').value()
 
       this.client.find({
         _id: {
@@ -274,7 +262,7 @@ class DabNe extends Dab {
                 stat.message = rec.message
               }
             }
-            stat[this.options.idDest] = r._id
+            stat._id = r._id
             if (!stat.success && !stat.message)
               stat.message = 'Not found'
             else
@@ -329,7 +317,7 @@ class DabNe extends Dab {
           let ok = 0, status = []
           this._.each(body, (r, i) => {
             let stat = { success: info.indexOf(r) > -1 ? true : false }
-            stat[this.options.idDest] = r
+            stat._id = r
             if (!stat.success)
               stat.message = 'Not found'
             else
