@@ -1,6 +1,6 @@
 {
   "name": "@rappopo/dab-ne",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A NeDB data access layer that is so stupid!",
   "main": "index.js",
   "scripts": {
@@ -21,7 +21,7 @@
     "url": "git+https://github.com/rappopo/dab-ne.git"
   },
   "dependencies": {
-    "@rappopo/dab": "0.0.8",
+    "@rappopo/dab": "0.0.11",
     "nedb": "^1.8.0"
   },
   "devDependencies": {
